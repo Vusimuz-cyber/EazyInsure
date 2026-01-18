@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <section style="padding: 4rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem;">Vehicle Inspection</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'success' %}green{% else %}red{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; margin: 0 auto; background: rgba(135, 206, 235, 0.8); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+            {% csrf_token %}
+            <select name="application_id" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px;" required>
+                <option value="">Select Application</option>
+                {% for app in applications %}
+                    <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} (ID: {{ app.id_number }})</option>
+                {% endfor %}
+            </select>
+            {% for i in "1234567890"|make_list %}
+                <input type="file" name="photo{{ forloop.counter }}" style="padding: 1rem; font-size: 1.1rem;" required>
+            {% endfor %}
+            <button type="submit" style="padding: 1rem; font-size: 1.1rem; background: #1e3a8a; color: white; border: none; border-radius: 5px; cursor: pointer; transition: transform 0.2s;">Submit Inspection</button>
+        </form>
+    </section>
+{% endblock %}

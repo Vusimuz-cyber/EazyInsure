@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h1>Manage Inspections</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="{% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% for inspection in inspections %}
+        <div class="card">
+            <p><strong>Application:</strong> {{ inspection.application.car_make }} {{ inspection.application.car_model }}</p>
+            <p><strong>User:</strong> {{ inspection.application.user.username }}</p>
+            <p><strong>Status:</strong> {{ inspection.status }}</p>
+            <div class="grid">
+                {% if inspection.photo1 %}<img src="{{ inspection.photo1.url }}" alt="Inspection Photo 1" class="grid-item">{% endif %}
+                {% if inspection.photo2 %}<img src="{{ inspection.photo2.url }}" alt="Inspection Photo 2" class="grid-item">{% endif %}
+                {% if inspection.photo3 %}<img src="{{ inspection.photo3.url }}" alt="Inspection Photo 3" class="grid-item">{% endif %}
+                {% if inspection.photo4 %}<img src="{{ inspection.photo4.url }}" alt="Inspection Photo 4" class="grid-item">{% endif %}
+                {% if inspection.photo5 %}<img src="{{ inspection.photo5.url }}" alt="Inspection Photo 5" class="grid-item">{% endif %}
+                {% if inspection.photo6 %}<img src="{{ inspection.photo6.url }}" alt="Inspection Photo 6" class="grid-item">{% endif %}
+                {% if inspection.photo7 %}<img src="{{ inspection.photo7.url }}" alt="Inspection Photo 7" class="grid-item">{% endif %}
+                {% if inspection.photo8 %}<img src="{{ inspection.photo8.url }}" alt="Inspection Photo 8" class="grid-item">{% endif %}
+                {% if inspection.photo9 %}<img src="{{ inspection.photo9.url }}" alt="Inspection Photo 9" class="grid-item">{% endif %}
+                {% if inspection.photo10 %}<img src="{{ inspection.photo10.url }}" alt="Inspection Photo 10" class="grid-item">{% endif %}
+            </div>
+            {% if inspection.decline_reason %}
+                <p class="message-error"><strong>Decline Reason:</strong> {{ inspection.decline_reason }}</p>
+            {% endif %}
+            <form method="post" class="form">
+                {% csrf_token %}
+                <select name="status">
+                    <option value="pending" {% if inspection.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if inspection.status == 'approved' %}selected{% endif %}>Approved</option>
+                    <option value="declined" {% if inspection.status == 'declined' %}selected{% endif %}>Declined</option>
+                </select>
+                <textarea name="decline_reason" placeholder="Decline reason (if applicable)">{{ inspection.decline_reason }}</textarea>
+                <input type="hidden" name="inspection_id" value="{{ inspection.id }}">
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}

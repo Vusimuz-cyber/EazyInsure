@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <section style="padding: 4rem; text-align: center;">
+        <div style="background: rgba(255, 111, 97, 0.8); padding: 2rem; max-width: 500px; margin: 0 auto; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
+            <h1 style="font-size: 2.5rem; color: white; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Register for EazyInsure</h1>
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color: #FF6F61; margin-bottom: 1.5rem; font-size: 1.1rem; background: rgba(255, 255, 255, 0.5); padding: 0.5rem; border-radius: 5px;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <form method="post" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="email" name="email" placeholder="Email" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="password" name="password1" placeholder="Password" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="password" name="password2" placeholder="Confirm Password" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="date" name="date_of_birth" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="number" name="driving_experience_years" placeholder="Years of Driving Experience" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="text" name="license_number" placeholder="Driver's License Number" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <input type="text" name="emergency_contact" placeholder="Emergency Contact Number" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                <select name="role" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit" style="padding: 1rem; font-size: 1.2rem; background: #8A4AF3; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s, box-shadow 0.3s;">Register</button>
+            </form>
+            <p style="color: white; margin-top: 1rem; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">Already have an account? <a href="{% url 'login' %}" style="color: #32CD32; text-decoration: underline;">Login here</a>.</p>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <section style="padding: 4rem; text-align: center;">
+        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Manage Applications</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'success' %}#32CD32{% else %}#FF6F61{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem; background: rgba(255, 255, 255, 0.5); padding: 0.5rem; border-radius: 5px;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% for application in applications %}
+            <div style="padding: 1.5rem; background: rgba(255, 255, 255, 0.7); margin: 1rem auto; max-width: 800px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
+                <p style="color: #8A4AF3;"><strong>User:</strong> {{ application.user.username }}</p>
+                <p style="color: #8A4AF3;"><strong>Car Make:</strong> {{ application.car_make }}</p>
+                <p style="color: #8A4AF3;"><strong>Car Model:</strong> {{ application.car_model }}</p>
+                <p style="color: #8A4AF3;"><strong>Car Year:</strong> {{ application.car_year }}</p>
+                <p style="color: #8A4AF3;"><strong>VIN:</strong> {{ application.vin }}</p>
+                <p style="color: #8A4AF3;"><strong>Registration:</strong> {{ application.registration_number }}</p>
+                <p style="color: #8A4AF3;"><strong>Mileage:</strong> {{ application.mileage }} km</p>
+                <p style="color: #8A4AF3;"><strong>Modifications:</strong> {{ application.modifications|default:"None" }}</p>
+                <p style="color: #8A4AF3;"><strong>Security Features:</strong> Tracking: {{ application.has_tracking_device|yesno:"Yes,No" }}, Alarm: {{ application.has_alarm|yesno:"Yes,No" }}, Parking: {{ application.parking_type }}</p>
+                <p style="color: #8A4AF3;"><strong>Full Name:</strong> {{ application.full_name }}</p>
+                <p style="color: #8A4AF3;"><strong>ID Number:</strong> {{ application.id_number }}</p>
+                <p style="color: #8A4AF3;"><strong>Address:</strong> {{ application.address }}</p>
+                <p style="color: #8A4AF3;"><strong>Status:</strong> {{ application.status }}</p>
+                <p style="color: #8A4AF3;"><strong>Created At:</strong> {{ application.created_at }}</p>
+                {% if application.decline_reason %}
+                    <p style="color: #FF6F61;"><strong>Decline Reason:</strong> {{ application.decline_reason }}</p>
+                {% endif %}
+                <form method="post" style="margin-top: 1rem;">
+                    {% csrf_token %}
+                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                    <button type="submit" name="action" value="approve" style="padding: 1rem; background: #32CD32; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); margin-right: 1rem;">Approve</button>
+                    <button type="submit" name="action" value="decline" style="padding: 1rem; background: #FF6F61; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); margin-right: 1rem;">Decline</button>
+                    {% if application.status == 'declined' %}
+                        <input type="text" name="decline_reason" placeholder="Reason for decline" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    {% endif %}
+                </form>
+            </div>
+        {% empty %}
+            <p style="color: white; font-size: 1.2rem;">No applications found.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

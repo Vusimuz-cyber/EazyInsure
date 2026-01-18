@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h1>Manage Claims</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="{% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% for claim in claims %}
+        <div class="card">
+            <p><strong>Application:</strong> {{ claim.application.car_make }} {{ claim.application.car_model }}</p>
+            <p><strong>User:</strong> {{ claim.application.user.username }}</p>
+            <p><strong>Policy:</strong> {{ claim.policy.policy_type }}</p>
+            <p><strong>Claim Type:</strong> {{ claim.claim_type }}</p>
+            <p><strong>Description:</strong> {{ claim.description }}</p>
+            <p><strong>Amount:</strong> R{{ claim.amount }}</p>
+            <p><strong>Status:</strong> {{ claim.status }}</p>
+            <p><strong>Created At:</strong> {{ claim.created_at }}</p>
+            <div class="grid">
+                {% if claim.photo1 %}<img src="{{ claim.photo1.url }}" alt="Claim Photo 1" class="grid-item">{% endif %}
+                {% if claim.photo2 %}<img src="{{ claim.photo2.url }}" alt="Claim Photo 2" class="grid-item">{% endif %}
+                {% if claim.photo3 %}<img src="{{ claim.photo3.url }}" alt="Claim Photo 3" class="grid-item">{% endif %}
+            </div>
+            {% if claim.decline_reason %}
+                <p class="message-error"><strong>Decline Reason:</strong> {{ claim.decline_reason }}</p>
+            {% endif %}
+            <form method="post" class="form">
+                {% csrf_token %}
+                <select name="status">
+                    <option value="pending" {% if claim.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if claim.status == 'approved' %}selected{% endif %}>Approved</option>
+                    <option value="declined" {% if claim.status == 'declined' %}selected{% endif %}>Declined</option>
+                </select>
+                <textarea name="decline_reason" placeholder="Decline reason (if applicable)">{{ claim.decline_reason }}</textarea>
+                <input type="hidden" name="claim_id" value="{{ claim.id }}">
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}
