@@ -1,58 +1,103 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <section style="padding: 4rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Manage Your Policies</h1>
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: {% if message.tags == 'success' %}#32CD32{% else %}#FF6F61{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem; background: rgba(255, 255, 255, 0.5); padding: 0.5rem; border-radius: 5px;">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+<div class="pg">
 
-        <!-- Create New Policy -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Create a New Policy</h2>
-        <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; margin: 0 auto; background: rgba(138, 74, 243, 0.8); padding: 2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-            {% csrf_token %}
-            <select name="quote_id" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-                <option value="">Select Quote</option>
-                {% for quote in quotes %}
-                    <option value="{{ quote.id }}">Quote for {{ quote.car_make }} {{ quote.car_model }} (R{{ quote.premium }})</option>
-                {% endfor %}
-            </select>
-            <select name="application_id" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-                <option value="">Select Application</option>
-                {% for app in applications %}
-                    <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} (ID: {{ app.id_number }})</option>
-                {% endfor %}
-            </select>
-            <select name="policy_type" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-                <option value="third_party">Third-Party</option>
-                <option value="third_party_fire_theft">Third-Party, Fire & Theft</option>
-                <option value="comprehensive">Comprehensive</option>
-            </select>
-            <button type="submit" style="padding: 1rem; font-size: 1.2rem; background: #FF6F61; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s, box-shadow 0.3s;">Create Policy</button>
-        </form>
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Your <span>Policies.</span></h1>
+        <p class="t-sub">Create, view, and manage your active insurance policies.</p>
+    </div>
 
-        <!-- Existing Policies -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Your Policies</h2>
-        {% for policy in policies %}
-            <div style="padding: 1.5rem; background: rgba(255, 255, 255, 0.7); margin: 1rem auto; max-width: 800px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <p style="color: #8A4AF3;"><strong>Policy Type:</strong> {{ policy.policy_type }}</p>
-                <p style="color: #8A4AF3;"><strong>Application:</strong> {{ policy.application.car_make }} {{ policy.application.car_model }}</p>
-                <p style="color: #8A4AF3;"><strong>Premium:</strong> R{{ policy.premium }}</p>
-                <p style="color: #8A4AF3;"><strong>Start Date:</strong> {{ policy.start_date }}</p>
-                <p style="color: #8A4AF3;"><strong>End Date:</strong> {{ policy.end_date }}</p>
-                <p style="color: #8A4AF3;"><strong>Status:</strong> {{ policy.status }}</p>
-                <p style="color: #8A4AF3;"><strong>Payment Status:</strong> {{ policy.payment_status }}</p>
-                {% if policy.payment_status == 'pending' %}
-                    <a href="{% url 'pay_policy' policy.id %}" style="padding: 1rem; background: #32CD32; color: white; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 1rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s;">Pay Now</a>
-                {% endif %}
-                {% if policy.status == 'expired' %}
-                    <a href="{% url 'renew_policy' policy.id %}" style="padding: 1rem; background: #FF6F61; color: white; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 1rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s;">Renew Policy</a>
-                {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}" style="max-width:820px;">
+                {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
             </div>
-        {% empty %}
-            <p style="color: white; font-size: 1.2rem;">No policies found.</p>
         {% endfor %}
-    </section>
+    {% endif %}
+
+    <!-- Create Policy -->
+    <h2 class="t-section anim">Create a New Policy</h2>
+    <div class="form-wrap anim-1" style="margin-bottom:3.5rem;">
+        <form method="post">
+            {% csrf_token %}
+            <div class="fg">
+                <label class="flbl">Select Quote</label>
+                <select name="quote_id" required>
+                    <option value="">Choose an approved quote</option>
+                    {% for quote in quotes %}
+                        <option value="{{ quote.id }}">{{ quote.car_make }} {{ quote.car_model }} — R{{ quote.premium }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="fg">
+                <label class="flbl">Select Application</label>
+                <select name="application_id" required>
+                    <option value="">Choose an approved application</option>
+                    {% for app in applications %}
+                        <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} ({{ app.id_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="fg">
+                <label class="flbl">Policy Type</label>
+                <select name="policy_type" required>
+                    <option value="third_party">Third-Party</option>
+                    <option value="third_party_fire_theft">Third-Party, Fire &amp; Theft</option>
+                    <option value="comprehensive">Comprehensive</option>
+                </select>
+            </div>
+            <div style="height:0.4rem;"></div>
+            <button type="submit" class="btn btn-gold btn-full">Create Policy →</button>
+        </form>
+    </div>
+
+    <!-- Existing Policies -->
+    <h2 class="t-section anim">Active Policies</h2>
+    {% for policy in policies %}
+    <div class="card anim" style="margin-bottom:1.1rem; max-width:820px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--txt);">{{ policy.application.car_make }} {{ policy.application.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2); margin-top:0.15rem;">{{ policy.policy_type|upper|replace:"_":" " }}</p>
+            </div>
+            <div style="text-align:right;">
+                <span class="badge badge-{{ policy.status }}">{{ policy.status }}</span>
+            </div>
+        </div>
+        <div class="dl">
+            <div class="dl-item">
+                <span class="dl-key">Premium</span>
+                <span class="dl-val" style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:600; color:var(--gold-l);">R{{ policy.premium }}</span>
+            </div>
+            <div class="dl-item">
+                <span class="dl-key">Start Date</span>
+                <span class="dl-val">{{ policy.start_date }}</span>
+            </div>
+            <div class="dl-item">
+                <span class="dl-key">End Date</span>
+                <span class="dl-val">{{ policy.end_date }}</span>
+            </div>
+            <div class="dl-item">
+                <span class="dl-key">Payment</span>
+                <span class="dl-val"><span class="badge badge-{% if policy.payment_status == 'paid' %}paid{% else %}pending{% endif %}">{{ policy.payment_status }}</span></span>
+            </div>
+        </div>
+        <div class="act-row">
+            {% if policy.payment_status == 'pending' %}
+                <a href="{% url 'pay_policy' policy.id %}" class="btn btn-ok">💳 Pay Now</a>
+            {% endif %}
+            {% if policy.status == 'expired' %}
+                <a href="{% url 'renew_policy' policy.id %}" class="btn btn-blue">🔄 Renew Policy</a>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">📁</div>
+        <p>No policies yet. Create one above using an approved quote and application.</p>
+    </div>
+    {% endfor %}
+
+</div>
 {% endblock %}

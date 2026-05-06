@@ -1,34 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <section style="padding: 4rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Apply for Insurance</h1>
+<div class="pg-md">
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Apply for <span>Insurance.</span></h1>
+        <p class="t-sub">Complete all fields below to submit your insurance application.</p>
+    </div>
+
+    <div class="form-wrap form-wrap-wide anim-1">
         {% if messages %}
             {% for message in messages %}
-                <p style="color: {% if message.tags == 'success' %}#32CD32{% else %}#FF6F61{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem; background: rgba(255, 255, 255, 0.5); padding: 0.5rem; border-radius: 5px;">{{ message }}</p>
+                <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}">
+                    {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
-        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; margin: 0 auto; background: rgba(50, 205, 50, 0.8); padding: 2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
+
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="text" name="car_make" placeholder="Car Make" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="text" name="car_model" placeholder="Car Model" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="number" name="car_year" placeholder="Car Year" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="text" name="vin" placeholder="VIN (17 characters)" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="text" name="registration_number" placeholder="Registration Number" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="number" name="mileage" placeholder="Mileage (km)" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <textarea name="modifications" placeholder="Vehicle Modifications (if any)" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); min-height: 100px;"></textarea>
-            <label style="color: white; font-size: 1.1rem;"><input type="checkbox" name="has_tracking_device"> Has Tracking Device</label>
-            <label style="color: white; font-size: 1.1rem;"><input type="checkbox" name="has_alarm"> Has Alarm</label>
-            <select name="parking_type" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-                <option value="garage">Garage</option>
-                <option value="street">Street</option>
-                <option value="secure_lot">Secure Lot</option>
-            </select>
-            <input type="text" name="full_name" placeholder="Full Name" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <input type="text" name="id_number" placeholder="ID Number (13 digits)" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);" required>
-            <textarea name="address" placeholder="Address" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 8px; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); min-height: 100px;" required></textarea>
-            <label style="color: white; font-size: 1.1rem;">Proof of Income: <input type="file" name="proof_of_income" style="padding: 1rem; font-size: 1.1rem;"></label>
-            <button type="submit" style="padding: 1rem; font-size: 1.2rem; background: #8A4AF3; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); transition: transform 0.3s, box-shadow 0.3s;">Submit Application</button>
+
+            <!-- Vehicle Info -->
+            <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-l); margin-bottom:1.2rem;">Vehicle Information</p>
+            <div class="frow">
+                <div class="fg">
+                    <label class="flbl">Car Make</label>
+                    <input type="text" name="car_make" placeholder="e.g. Toyota" required>
+                </div>
+                <div class="fg">
+                    <label class="flbl">Car Model</label>
+                    <input type="text" name="car_model" placeholder="e.g. Hilux" required>
+                </div>
+            </div>
+            <div class="frow">
+                <div class="fg">
+                    <label class="flbl">Car Year</label>
+                    <input type="number" name="car_year" placeholder="e.g. 2018" required>
+                </div>
+                <div class="fg">
+                    <label class="flbl">Mileage (km)</label>
+                    <input type="number" name="mileage" placeholder="e.g. 85000" required>
+                </div>
+            </div>
+            <div class="frow">
+                <div class="fg">
+                    <label class="flbl">VIN (17 characters)</label>
+                    <input type="text" name="vin" placeholder="e.g. 1HGBH41JXMN109186" required maxlength="17">
+                </div>
+                <div class="fg">
+                    <label class="flbl">Registration Number</label>
+                    <input type="text" name="registration_number" placeholder="e.g. GP 123-456" required>
+                </div>
+            </div>
+            <div class="fg">
+                <label class="flbl">Vehicle Modifications (optional)</label>
+                <textarea name="modifications" placeholder="Describe any modifications to the vehicle..."></textarea>
+            </div>
+
+            <div class="divider" style="margin:1.5rem 0;"></div>
+            <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-l); margin-bottom:1.2rem;">Security &amp; Parking</p>
+
+            <div class="fg">
+                <label class="flbl">Parking Type</label>
+                <select name="parking_type" required>
+                    <option value="garage">🏠 Garage</option>
+                    <option value="street">🛣 Street</option>
+                    <option value="secure_lot">🔒 Secure Lot</option>
+                </select>
+            </div>
+            <div class="ck-group">
+                <label class="ck-row"><input type="checkbox" name="has_tracking_device"> GPS Tracking Device</label>
+                <label class="ck-row"><input type="checkbox" name="has_alarm"> Alarm System</label>
+            </div>
+
+            <div class="divider" style="margin:1.5rem 0;"></div>
+            <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-l); margin-bottom:1.2rem;">Personal Details</p>
+
+            <div class="frow">
+                <div class="fg">
+                    <label class="flbl">Full Name</label>
+                    <input type="text" name="full_name" placeholder="As per ID document" required>
+                </div>
+                <div class="fg">
+                    <label class="flbl">ID Number (13 digits)</label>
+                    <input type="text" name="id_number" placeholder="e.g. 9001011234567" required maxlength="13">
+                </div>
+            </div>
+            <div class="fg">
+                <label class="flbl">Residential Address</label>
+                <textarea name="address" placeholder="Full residential address" required></textarea>
+            </div>
+            <div class="fg">
+                <label class="flbl">Proof of Income</label>
+                <input type="file" name="proof_of_income" accept=".pdf,.jpg,.jpeg,.png">
+            </div>
+
+            <div style="height:0.5rem;"></div>
+            <button type="submit" class="btn btn-gold btn-full">Submit Application →</button>
         </form>
-    </section>
+    </div>
+</div>
 {% endblock %}

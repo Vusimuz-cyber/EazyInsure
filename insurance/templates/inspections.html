@@ -1,25 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <section style="padding: 4rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem;">Vehicle Inspection</h1>
+<div class="pg-sm">
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Vehicle <span>Inspection.</span></h1>
+        <p class="t-sub">Upload 10 photos of your vehicle from all angles for review.</p>
+    </div>
+
+    <div class="form-wrap anim-1">
         {% if messages %}
             {% for message in messages %}
-                <p style="color: {% if message.tags == 'success' %}green{% else %}red{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem;">{{ message }}</p>
+                <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}">
+                    {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
-        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; margin: 0 auto; background: rgba(135, 206, 235, 0.8); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <select name="application_id" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px;" required>
-                <option value="">Select Application</option>
-                {% for app in applications %}
-                    <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} (ID: {{ app.id_number }})</option>
-                {% endfor %}
-            </select>
+
+            <div class="fg">
+                <label class="flbl">Select Application</label>
+                <select name="application_id" required>
+                    <option value="">Choose your vehicle application</option>
+                    {% for app in applications %}
+                        <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} ({{ app.id_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="divider" style="margin:1.4rem 0;"></div>
+            <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-l); margin-bottom:1.2rem;">Upload 10 Vehicle Photos</p>
+            <p style="font-size:0.82rem; color:var(--txt-2); margin-bottom:1.5rem;">Include front, rear, sides, interior, engine bay, tyres, and any existing damage.</p>
+
             {% for i in "1234567890"|make_list %}
-                <input type="file" name="photo{{ forloop.counter }}" style="padding: 1rem; font-size: 1.1rem;" required>
+            <div class="fg">
+                <label class="flbl">Photo {{ forloop.counter }}</label>
+                <input type="file" name="photo{{ forloop.counter }}" accept="image/*" required>
+            </div>
             {% endfor %}
-            <button type="submit" style="padding: 1rem; font-size: 1.1rem; background: #1e3a8a; color: white; border: none; border-radius: 5px; cursor: pointer; transition: transform 0.2s;">Submit Inspection</button>
+
+            <div style="height:0.5rem;"></div>
+            <button type="submit" class="btn btn-gold btn-full">Submit Inspection →</button>
         </form>
-    </section>
+    </div>
+</div>
 {% endblock %}

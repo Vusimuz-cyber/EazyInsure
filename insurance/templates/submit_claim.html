@@ -1,28 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <section style="padding: 4rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; color: white; margin-bottom: 2rem;">Submit a Claim</h1>
+<div class="pg-sm">
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Submit a <span>Claim.</span></h1>
+        <p class="t-sub">Report an incident and our team will review your claim promptly.</p>
+    </div>
+
+    <div class="form-wrap anim-1">
         {% if messages %}
             {% for message in messages %}
-                <p style="color: {% if message.tags == 'success' %}green{% else %}red{% endif %}; margin-bottom: 1.5rem; font-size: 1.1rem;">{{ message }}</p>
+                <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}">
+                    {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
-        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; margin: 0 auto; background: rgba(135, 206, 235, 0.8); padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
+
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <select name="application_id" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px;" required>
-                <option value="">Select Application</option>
-                {% for app in applications %}
-                    <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} (ID: {{ app.id_number }})</option>
-                {% endfor %}
-            </select>
-            <input type="text" name="claim_type" placeholder="Claim Type" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px;" required>
-            <textarea name="description" placeholder="Description" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px; min-height: 100px;" required></textarea>
-            <input type="number" name="amount" step="0.01" placeholder="Amount" style="padding: 1rem; font-size: 1.1rem; border: none; border-radius: 5px;" required>
-            <input type="file" name="photo1" style="padding: 1rem; font-size: 1.1rem;">
-            <input type="file" name="photo2" style="padding: 1rem; font-size: 1.1rem;">
-            <input type="file" name="photo3" style="padding: 1rem; font-size: 1.1rem;">
-            <button type="submit" style="padding: 1rem; font-size: 1.1rem; background: #1e3a8a; color: white; border: none; border-radius: 5px; cursor: pointer; transition: transform 0.2s;">Submit Claim</button>
+
+            <div class="fg">
+                <label class="flbl">Select Vehicle / Application</label>
+                <select name="application_id" required>
+                    <option value="">Choose your insured vehicle</option>
+                    {% for app in applications %}
+                        <option value="{{ app.id }}">{{ app.car_make }} {{ app.car_model }} ({{ app.id_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="fg">
+                <label class="flbl">Claim Type</label>
+                <input type="text" name="claim_type" placeholder="e.g. Accident, Theft, Fire Damage" required>
+            </div>
+
+            <div class="fg">
+                <label class="flbl">Description of Incident</label>
+                <textarea name="description" placeholder="Describe what happened in detail..." required></textarea>
+            </div>
+
+            <div class="fg">
+                <label class="flbl">Estimated Claim Amount (R)</label>
+                <input type="number" name="amount" step="0.01" placeholder="e.g. 15000.00" required min="0">
+            </div>
+
+            <div class="divider" style="margin:1.4rem 0;"></div>
+            <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-l); margin-bottom:1.2rem;">Supporting Photos (optional)</p>
+
+            <div class="fg">
+                <label class="flbl">Photo 1</label>
+                <input type="file" name="photo1" accept="image/*">
+            </div>
+            <div class="fg">
+                <label class="flbl">Photo 2</label>
+                <input type="file" name="photo2" accept="image/*">
+            </div>
+            <div class="fg">
+                <label class="flbl">Photo 3</label>
+                <input type="file" name="photo3" accept="image/*">
+            </div>
+
+            <div style="height:0.5rem;"></div>
+            <button type="submit" class="btn btn-gold btn-full">Submit Claim →</button>
         </form>
-    </section>
+    </div>
+</div>
 {% endblock %}

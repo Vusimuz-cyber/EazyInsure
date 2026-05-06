@@ -1,44 +1,73 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<section>
-    <h1>Manage Inspections</h1>
+<div class="pg">
+
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Manage <span>Inspections.</span></h1>
+        <p class="t-sub">Review vehicle inspection photo submissions.</p>
+    </div>
+
     {% if messages %}
         {% for message in messages %}
-            <p class="{% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">{{ message }}</p>
+            <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}" style="max-width:860px;">
+                {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
+
     {% for inspection in inspections %}
-        <div class="card">
-            <p><strong>Application:</strong> {{ inspection.application.car_make }} {{ inspection.application.car_model }}</p>
-            <p><strong>User:</strong> {{ inspection.application.user.username }}</p>
-            <p><strong>Status:</strong> {{ inspection.status }}</p>
-            <div class="grid">
-                {% if inspection.photo1 %}<img src="{{ inspection.photo1.url }}" alt="Inspection Photo 1" class="grid-item">{% endif %}
-                {% if inspection.photo2 %}<img src="{{ inspection.photo2.url }}" alt="Inspection Photo 2" class="grid-item">{% endif %}
-                {% if inspection.photo3 %}<img src="{{ inspection.photo3.url }}" alt="Inspection Photo 3" class="grid-item">{% endif %}
-                {% if inspection.photo4 %}<img src="{{ inspection.photo4.url }}" alt="Inspection Photo 4" class="grid-item">{% endif %}
-                {% if inspection.photo5 %}<img src="{{ inspection.photo5.url }}" alt="Inspection Photo 5" class="grid-item">{% endif %}
-                {% if inspection.photo6 %}<img src="{{ inspection.photo6.url }}" alt="Inspection Photo 6" class="grid-item">{% endif %}
-                {% if inspection.photo7 %}<img src="{{ inspection.photo7.url }}" alt="Inspection Photo 7" class="grid-item">{% endif %}
-                {% if inspection.photo8 %}<img src="{{ inspection.photo8.url }}" alt="Inspection Photo 8" class="grid-item">{% endif %}
-                {% if inspection.photo9 %}<img src="{{ inspection.photo9.url }}" alt="Inspection Photo 9" class="grid-item">{% endif %}
-                {% if inspection.photo10 %}<img src="{{ inspection.photo10.url }}" alt="Inspection Photo 10" class="grid-item">{% endif %}
+    <div class="card anim" style="margin-bottom:1.25rem; max-width:860px;">
+
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.5rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--txt);">{{ inspection.application.car_make }} {{ inspection.application.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2); margin-top:0.15rem;">Submitted by <span style="color:var(--gold);">{{ inspection.application.user.username }}</span></p>
             </div>
-            {% if inspection.decline_reason %}
-                <p class="message-error"><strong>Decline Reason:</strong> {{ inspection.decline_reason }}</p>
-            {% endif %}
-            <form method="post" class="form">
-                {% csrf_token %}
-                <select name="status">
-                    <option value="pending" {% if inspection.status == 'pending' %}selected{% endif %}>Pending</option>
-                    <option value="approved" {% if inspection.status == 'approved' %}selected{% endif %}>Approved</option>
-                    <option value="declined" {% if inspection.status == 'declined' %}selected{% endif %}>Declined</option>
-                </select>
-                <textarea name="decline_reason" placeholder="Decline reason (if applicable)">{{ inspection.decline_reason }}</textarea>
-                <input type="hidden" name="inspection_id" value="{{ inspection.id }}">
-                <button type="submit">Update</button>
-            </form>
+            <span class="badge badge-{{ inspection.status }}">{{ inspection.status }}</span>
         </div>
+
+        <!-- Photo grid -->
+        {% with p1=inspection.photo1 p2=inspection.photo2 p3=inspection.photo3 p4=inspection.photo4 p5=inspection.photo5 p6=inspection.photo6 p7=inspection.photo7 p8=inspection.photo8 p9=inspection.photo9 p10=inspection.photo10 %}
+        {% if p1 or p2 or p3 or p4 or p5 %}
+        <div class="photo-grid">
+            {% if p1  %}<img src="{{ p1.url  }}" alt="Photo 1">{% endif %}
+            {% if p2  %}<img src="{{ p2.url  }}" alt="Photo 2">{% endif %}
+            {% if p3  %}<img src="{{ p3.url  }}" alt="Photo 3">{% endif %}
+            {% if p4  %}<img src="{{ p4.url  }}" alt="Photo 4">{% endif %}
+            {% if p5  %}<img src="{{ p5.url  }}" alt="Photo 5">{% endif %}
+            {% if p6  %}<img src="{{ p6.url  }}" alt="Photo 6">{% endif %}
+            {% if p7  %}<img src="{{ p7.url  }}" alt="Photo 7">{% endif %}
+            {% if p8  %}<img src="{{ p8.url  }}" alt="Photo 8">{% endif %}
+            {% if p9  %}<img src="{{ p9.url  }}" alt="Photo 9">{% endif %}
+            {% if p10 %}<img src="{{ p10.url }}" alt="Photo 10">{% endif %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if inspection.decline_reason %}
+        <div class="alert alert-err" style="margin-top:1rem; margin-bottom:0;">⚠ {{ inspection.decline_reason }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="inspection_id" value="{{ inspection.id }}">
+            <div class="act-row">
+                <select name="status" style="width:auto; padding:0.6rem 2rem 0.6rem 0.85rem; font-size:0.85rem;">
+                    <option value="pending"  {% if inspection.status == 'pending'  %}selected{% endif %}>⏳ Pending</option>
+                    <option value="approved" {% if inspection.status == 'approved' %}selected{% endif %}>✓ Approved</option>
+                    <option value="declined" {% if inspection.status == 'declined' %}selected{% endif %}>✕ Declined</option>
+                </select>
+                <input type="text" name="decline_reason" value="{{ inspection.decline_reason }}" placeholder="Decline reason (if applicable)" class="decline-input">
+                <button type="submit" class="btn btn-gold" style="padding:0.6rem 1.2rem; font-size:0.82rem;">Update</button>
+            </div>
+        </form>
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">📷</div>
+        <p>No inspections to review.</p>
+    </div>
     {% endfor %}
-</section>
+
+</div>
 {% endblock %}

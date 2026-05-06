@@ -1,89 +1,161 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <section style="padding: 4rem; text-align: center;">
-        <h1 style="font-size: 2.5rem; color: black; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(20, 18, 18, 0.3);">Welcome to EazyInsure</h1>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
-            <a href="{% url 'get_quote' %}" style="padding: 2rem; background: rgba(138, 74, 243, 0.7); color: white; text-decoration: none; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px); transition: transform 0.3s, box-shadow 0.3s;">Get Quote</a>
-            <a href="{% url 'apply_insurance' %}" style="padding: 2rem; background: rgba(50, 205, 50, 0.7); color: white; text-decoration: none; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px); transition: transform 0.3s, box-shadow 0.3s;">Apply for Insurance</a>
-            <a href="{% url 'inspections' %}" style="padding: 2rem; background: rgba(255, 111, 97, 0.7); color: white; text-decoration: none; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px); transition: transform 0.3s, box-shadow 0.3s;">Inspections</a>
-            <a href="{% url 'submit_claim' %}" style="padding: 2rem; background: rgba(135, 206, 235, 0.7); color: white; text-decoration: none; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px); transition: transform 0.3s, box-shadow 0.3s;">Submit Claim</a>
-            <a href="{% url 'view_policies' %}" style="padding: 2rem; background: rgba(255, 215, 0, 0.7); color: white; text-decoration: none; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px); transition: transform 0.3s, box-shadow 0.3s;">Manage Policies</a>
+<div class="pg">
+
+    <!-- Hero Header -->
+    <div class="page-hdr anim" style="margin-bottom:3rem;">
+        <h1 class="t-hero">Good day,<br><span>{{ user.username }}.</span></h1>
+        <p class="t-sub" style="margin-top:0.6rem;">Manage your coverage, quotes, and claims — all in one place.</p>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="g-act" style="margin-bottom:3.5rem;">
+        <a href="{% url 'get_quote' %}" class="act-card anim-1" style="--ac:var(--blue); --ac-dim:var(--blue-dim); --ac-bdr:rgba(96,165,250,0.22);">
+            <div class="act-icon">📊</div>
+            <div>
+                <div class="act-label">Get Quote</div>
+                <div class="act-desc">Instant premium estimate</div>
+            </div>
+        </a>
+        <a href="{% url 'apply_insurance' %}" class="act-card anim-2" style="--ac:var(--gold); --ac-dim:var(--gold-dim); --ac-bdr:var(--gold-bdr);">
+            <div class="act-icon">🛡</div>
+            <div>
+                <div class="act-label">Apply for Insurance</div>
+                <div class="act-desc">Start your application</div>
+            </div>
+        </a>
+        <a href="{% url 'inspections' %}" class="act-card anim-3" style="--ac:var(--green); --ac-dim:var(--green-dim); --ac-bdr:rgba(34,197,94,0.22);">
+            <div class="act-icon">📷</div>
+            <div>
+                <div class="act-label">Inspections</div>
+                <div class="act-desc">Submit vehicle photos</div>
+            </div>
+        </a>
+        <a href="{% url 'submit_claim' %}" class="act-card anim-4" style="--ac:var(--orange); --ac-dim:var(--orange-dim); --ac-bdr:rgba(251,146,60,0.22);">
+            <div class="act-icon">📋</div>
+            <div>
+                <div class="act-label">Submit Claim</div>
+                <div class="act-desc">Report an incident</div>
+            </div>
+        </a>
+        <a href="{% url 'view_policies' %}" class="act-card anim-5" style="--ac:var(--purple); --ac-dim:var(--purple-dim); --ac-bdr:rgba(167,139,250,0.22);">
+            <div class="act-icon">📁</div>
+            <div>
+                <div class="act-label">Manage Policies</div>
+                <div class="act-desc">View & pay policies</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Policy Types -->
+    <h2 class="t-section anim">Our Coverage Plans</h2>
+    <div class="g3" style="margin-bottom:3.5rem;">
+        <div class="pol-card anim-1">
+            <div class="pol-accent-bar" style="background:var(--blue);"></div>
+            <div class="pol-name" style="color:var(--blue);">Third-Party</div>
+            <p class="pol-desc">Covers damages to other vehicles in accidents you're at fault for. Ideal for budget-conscious drivers who want essential protection.</p>
+            <div class="pol-price">From 80% of base premium</div>
         </div>
+        <div class="pol-card anim-2">
+            <div class="pol-accent-bar" style="background:linear-gradient(90deg,var(--gold),var(--gold-l));"></div>
+            <div class="pol-name" style="color:var(--gold-l);">Third-Party, Fire &amp; Theft</div>
+            <p class="pol-desc">Includes Third-Party coverage plus protection against fire damage and theft. The most popular balanced coverage option.</p>
+            <div class="pol-price">At 100% of base premium</div>
+        </div>
+        <div class="pol-card anim-3">
+            <div class="pol-accent-bar" style="background:var(--green);"></div>
+            <div class="pol-name" style="color:var(--green);">Comprehensive</div>
+            <p class="pol-desc">Full coverage for accidents, theft, fire, weather damage, and more. Ultimate peace of mind for complete protection.</p>
+            <div class="pol-price">At 120% of base premium</div>
+        </div>
+    </div>
 
-        <!-- Policy Advertisements -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Our Policies</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
-            <div style="padding: 2rem; background: rgba(138, 74, 243, 0.7); border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <h3 style="font-size: 1.5rem; color: white; margin-bottom: 1rem;">Third-Party</h3>
-                <p style="color: white; font-size: 1.1rem;">Covers damages to other vehicles in accidents you're at fault for. Ideal for budget-conscious drivers. Starting at 80% of base premium.</p>
+    <!-- Applications -->
+    <h2 class="t-section anim">Your Applications</h2>
+    {% for application in applications %}
+    <div class="card anim" style="margin-bottom:1.1rem; max-width:820px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--txt);">{{ application.car_make }} {{ application.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2);">{{ application.car_year }} &middot; {{ application.registration_number }}</p>
             </div>
-            <div style="padding: 2rem; background: rgba(50, 205, 50, 0.7); border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <h3 style="font-size: 1.5rem; color: white; margin-bottom: 1rem;">Third-Party, Fire & Theft</h3>
-                <p style="color: white; font-size: 1.1rem;">Includes Third-Party coverage plus protection against fire and theft. Balanced coverage at 100% of base premium.</p>
+            <span class="badge badge-{{ application.status }}">{{ application.status }}</span>
+        </div>
+        <div class="dl">
+            <div class="dl-item"><span class="dl-key">VIN</span><span class="dl-val">{{ application.vin }}</span></div>
+            <div class="dl-item"><span class="dl-key">Mileage</span><span class="dl-val">{{ application.mileage }} km</span></div>
+            <div class="dl-item"><span class="dl-key">Full Name</span><span class="dl-val">{{ application.full_name }}</span></div>
+            <div class="dl-item"><span class="dl-key">ID Number</span><span class="dl-val">{{ application.id_number }}</span></div>
+            <div class="dl-item"><span class="dl-key">Address</span><span class="dl-val">{{ application.address }}</span></div>
+        </div>
+        {% if application.decline_reason %}
+        <div class="alert alert-err" style="margin-top:1rem; margin-bottom:0;">⚠ {{ application.decline_reason }}</div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">📋</div>
+        <p>No applications found. <a href="{% url 'apply_insurance' %}" style="color:var(--gold-l); text-decoration:none; font-weight:500;">Apply now →</a></p>
+    </div>
+    {% endfor %}
+
+    <!-- Quotes -->
+    <h2 class="t-section anim" style="margin-top:3rem;">Your Quotes</h2>
+    {% for quote in quotes %}
+    <div class="card anim" style="margin-bottom:1.1rem; max-width:820px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--txt);">{{ quote.car_make }} {{ quote.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2);">{{ quote.car_year }}</p>
             </div>
-            <div style="padding: 2rem; background: rgba(255, 111, 97, 0.7); border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <h3 style="font-size: 1.5rem; color: white; margin-bottom: 1rem;">Comprehensive</h3>
-                <p style="color: white; font-size: 1.1rem;">Full coverage for accidents, theft, fire, and more. Ultimate peace of mind at 120% of base premium.</p>
+            <div style="text-align:right;">
+                <span class="badge badge-{{ quote.status }}">{{ quote.status }}</span>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.55rem; font-weight:600; color:var(--gold-l); margin-top:0.3rem;">R{{ quote.premium }}</p>
             </div>
         </div>
+        <div class="dl">
+            <div class="dl-item"><span class="dl-key">Address</span><span class="dl-val">{{ quote.address }}</span></div>
+            <div class="dl-item"><span class="dl-key">Risk Factors</span><span class="dl-val">{{ quote.risk_factors }}</span></div>
+        </div>
+        {% if quote.decline_reason %}
+        <div class="alert alert-err" style="margin-top:1rem; margin-bottom:0;">⚠ {{ quote.decline_reason }}</div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">📊</div>
+        <p>No quotes yet. <a href="{% url 'get_quote' %}" style="color:var(--gold-l); text-decoration:none; font-weight:500;">Get a quote →</a></p>
+    </div>
+    {% endfor %}
 
-        <!-- Applications -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Your Applications</h2>
-        {% for application in applications %}
-            <div style="padding: 1.5rem; background: rgba(255, 255, 255, 0.7); margin: 1rem auto; max-width: 800px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <p style="color: #8A4AF3;"><strong>Car Make:</strong> {{ application.car_make }}</p>
-                <p style="color: #8A4AF3;"><strong>Car Model:</strong> {{ application.car_model }}</p>
-                <p style="color: #8A4AF3;"><strong>Car Year:</strong> {{ application.car_year }}</p>
-                <p style="color: #8A4AF3;"><strong>VIN:</strong> {{ application.vin }}</p>
-                <p style="color: #8A4AF3;"><strong>Registration:</strong> {{ application.registration_number }}</p>
-                <p style="color: #8A4AF3;"><strong>Mileage:</strong> {{ application.mileage }} km</p>
-                <p style="color: #8A4AF3;"><strong>Full Name:</strong> {{ application.full_name }}</p>
-                <p style="color: #8A4AF3;"><strong>ID Number:</strong> {{ application.id_number }}</p>
-                <p style="color: #8A4AF3;"><strong>Address:</strong> {{ application.address }}</p>
-                <p style="color: #8A4AF3;"><strong>Status:</strong> {{ application.status }}</p>
-                {% if application.decline_reason %}
-                    <p style="color: #FF6F61;"><strong>Decline Reason:</strong> {{ application.decline_reason }}</p>
-                {% endif %}
+    <!-- Claims -->
+    <h2 class="t-section anim" style="margin-top:3rem;">Your Claims</h2>
+    {% for claim in claims %}
+    <div class="card anim" style="margin-bottom:1.1rem; max-width:820px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--txt);">{{ claim.application.car_make }} {{ claim.application.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2);">{{ claim.claim_type }}</p>
             </div>
-        {% empty %}
-            <p style="color: white; font-size: 1.2rem;">No applications found.</p>
-        {% endfor %}
+            <div style="text-align:right;">
+                <span class="badge badge-{{ claim.status }}">{{ claim.status }}</span>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.55rem; font-weight:600; color:var(--txt); margin-top:0.3rem;">R{{ claim.amount }}</p>
+            </div>
+        </div>
+        <div class="dl">
+            <div class="dl-item"><span class="dl-key">Description</span><span class="dl-val">{{ claim.description }}</span></div>
+        </div>
+        {% if claim.decline_reason %}
+        <div class="alert alert-err" style="margin-top:1rem; margin-bottom:0;">⚠ {{ claim.decline_reason }}</div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">📋</div>
+        <p>No claims submitted.</p>
+    </div>
+    {% endfor %}
 
-        <!-- Quotes -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Your Quotes</h2>
-        {% for quote in quotes %}
-            <div style="padding: 1.5rem; background: rgba(255, 255, 255, 0.7); margin: 1rem auto; max-width: 800px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <p style="color: #8A4AF3;"><strong>Car Make:</strong> {{ quote.car_make }}</p>
-                <p style="color: #8A4AF3;"><strong>Car Model:</strong> {{ quote.car_model }}</p>
-                <p style="color: #8A4AF3;"><strong>Car Year:</strong> {{ quote.car_year }}</p>
-                <p style="color: #8A4AF3;"><strong>Address:</strong> {{ quote.address }}</p>
-                <p style="color: #8A4AF3;"><strong>Premium:</strong> R{{ quote.premium }}</p>
-                <p style="color: #8A4AF3;"><strong>Risk Factors:</strong> {{ quote.risk_factors }}</p>
-                <p style="color: #8A4AF3;"><strong>Status:</strong> {{ quote.status }}</p>
-                {% if quote.decline_reason %}
-                    <p style="color: #FF6F61;"><strong>Decline Reason:</strong> {{ quote.decline_reason }}</p>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p style="color: white; font-size: 1.2rem;">No quotes found.</p>
-        {% endfor %}
-
-        <!-- Claims -->
-        <h2 style="font-size: 2rem; color: white; margin-top: 3rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Your Claims</h2>
-        {% for claim in claims %}
-            <div style="padding: 1.5rem; background: rgba(255, 255, 255, 0.7); margin: 1rem auto; max-width: 800px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); transform: translateZ(20px);">
-                <p style="color: #8A4AF3;"><strong>Application:</strong> {{ claim.application.car_make }} {{ claim.application.car_model }}</p>
-                <p style="color: #8A4AF3;"><strong>Claim Type:</strong> {{ claim.claim_type }}</p>
-                <p style="color: #8A4AF3;"><strong>Description:</strong> {{ claim.description }}</p>
-                <p style="color: #8A4AF3;"><strong>Amount:</strong> R{{ claim.amount }}</p>
-                <p style="color: #8A4AF3;"><strong>Status:</strong> {{ claim.status }}</p>
-                {% if claim.decline_reason %}
-                    <p style="color: #FF6F61;"><strong>Decline Reason:</strong> {{ claim.decline_reason }}</p>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p style="color: white; font-size: 1.2rem;">No claims found.</p>
-        {% endfor %}
-    </section>
+</div>
 {% endblock %}

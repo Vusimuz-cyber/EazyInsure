@@ -1,42 +1,72 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<section>
-    <h1>Manage Claims</h1>
+<div class="pg">
+
+    <div class="page-hdr anim">
+        <h1 class="t-hero">Manage <span>Claims.</span></h1>
+        <p class="t-sub">Assess and action submitted insurance claims.</p>
+    </div>
+
     {% if messages %}
         {% for message in messages %}
-            <p class="{% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">{{ message }}</p>
+            <div class="alert {% if message.tags == 'success' %}alert-ok{% else %}alert-err{% endif %}" style="max-width:860px;">
+                {% if message.tags == 'success' %}✓{% else %}⚠{% endif %} {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
+
     {% for claim in claims %}
-        <div class="card">
-            <p><strong>Application:</strong> {{ claim.application.car_make }} {{ claim.application.car_model }}</p>
-            <p><strong>User:</strong> {{ claim.application.user.username }}</p>
-            <p><strong>Policy:</strong> {{ claim.policy.policy_type }}</p>
-            <p><strong>Claim Type:</strong> {{ claim.claim_type }}</p>
-            <p><strong>Description:</strong> {{ claim.description }}</p>
-            <p><strong>Amount:</strong> R{{ claim.amount }}</p>
-            <p><strong>Status:</strong> {{ claim.status }}</p>
-            <p><strong>Created At:</strong> {{ claim.created_at }}</p>
-            <div class="grid">
-                {% if claim.photo1 %}<img src="{{ claim.photo1.url }}" alt="Claim Photo 1" class="grid-item">{% endif %}
-                {% if claim.photo2 %}<img src="{{ claim.photo2.url }}" alt="Claim Photo 2" class="grid-item">{% endif %}
-                {% if claim.photo3 %}<img src="{{ claim.photo3.url }}" alt="Claim Photo 3" class="grid-item">{% endif %}
+    <div class="card anim" style="margin-bottom:1.25rem; max-width:860px;">
+
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.5rem;">
+            <div>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--txt);">{{ claim.application.car_make }} {{ claim.application.car_model }}</p>
+                <p style="font-size:0.82rem; color:var(--txt-2); margin-top:0.15rem;">{{ claim.claim_type }} &middot; <span style="color:var(--gold);">{{ claim.application.user.username }}</span></p>
             </div>
-            {% if claim.decline_reason %}
-                <p class="message-error"><strong>Decline Reason:</strong> {{ claim.decline_reason }}</p>
-            {% endif %}
-            <form method="post" class="form">
-                {% csrf_token %}
-                <select name="status">
-                    <option value="pending" {% if claim.status == 'pending' %}selected{% endif %}>Pending</option>
-                    <option value="approved" {% if claim.status == 'approved' %}selected{% endif %}>Approved</option>
-                    <option value="declined" {% if claim.status == 'declined' %}selected{% endif %}>Declined</option>
-                </select>
-                <textarea name="decline_reason" placeholder="Decline reason (if applicable)">{{ claim.decline_reason }}</textarea>
-                <input type="hidden" name="claim_id" value="{{ claim.id }}">
-                <button type="submit">Update</button>
-            </form>
+            <div style="text-align:right;">
+                <span class="badge badge-{{ claim.status }}">{{ claim.status }}</span>
+                <p style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--txt); margin-top:0.3rem;">R{{ claim.amount }}</p>
+            </div>
         </div>
+
+        <div class="dl">
+            <div class="dl-item"><span class="dl-key">Policy</span><span class="dl-val">{{ claim.policy.policy_type }}</span></div>
+            <div class="dl-item"><span class="dl-key">Description</span><span class="dl-val">{{ claim.description }}</span></div>
+            <div class="dl-item"><span class="dl-key">Submitted</span><span class="dl-val">{{ claim.created_at }}</span></div>
+        </div>
+
+        {% if claim.photo1 or claim.photo2 or claim.photo3 %}
+        <div class="photo-grid" style="margin-top:1.1rem;">
+            {% if claim.photo1 %}<img src="{{ claim.photo1.url }}" alt="Claim photo 1">{% endif %}
+            {% if claim.photo2 %}<img src="{{ claim.photo2.url }}" alt="Claim photo 2">{% endif %}
+            {% if claim.photo3 %}<img src="{{ claim.photo3.url }}" alt="Claim photo 3">{% endif %}
+        </div>
+        {% endif %}
+
+        {% if claim.decline_reason %}
+        <div class="alert alert-err" style="margin-top:1rem; margin-bottom:0;">⚠ {{ claim.decline_reason }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="claim_id" value="{{ claim.id }}">
+            <div class="act-row">
+                <select name="status" style="width:auto; padding:0.6rem 2rem 0.6rem 0.85rem; font-size:0.85rem;">
+                    <option value="pending"  {% if claim.status == 'pending'  %}selected{% endif %}>⏳ Pending</option>
+                    <option value="approved" {% if claim.status == 'approved' %}selected{% endif %}>✓ Approved</option>
+                    <option value="declined" {% if claim.status == 'declined' %}selected{% endif %}>✕ Declined</option>
+                </select>
+                <input type="text" name="decline_reason" value="{{ claim.decline_reason }}" placeholder="Decline reason (if applicable)" class="decline-input">
+                <button type="submit" class="btn btn-gold" style="padding:0.6rem 1.2rem; font-size:0.82rem;">Update</button>
+            </div>
+        </form>
+    </div>
+    {% empty %}
+    <div class="empty-state anim">
+        <div class="ico">🔍</div>
+        <p>No claims to review.</p>
+    </div>
     {% endfor %}
-</section>
+
+</div>
 {% endblock %}

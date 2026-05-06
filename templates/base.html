@@ -5,18 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EazyInsure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     {% if user.is_authenticated %}
-        <nav>
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'view_policies' %}">Policies</a>
-            {% if user.userprofile.role == 'admin' %}
-                <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
-            {% endif %}
-            <a href="{% url 'logout' %}">Logout</a>
-        </nav>
+    <nav>
+        <div class="nav-inner">
+            <a href="{% url 'dashboard' %}" class="nav-logo">
+                <div class="nav-logo-mark">⚡</div>
+                <span>EazyInsure</span>
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'view_policies' %}" class="nav-link">Policies</a>
+                {% if user.userprofile.role == 'admin' %}
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link nav-admin">Admin</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="nav-logout">Logout</a>
+            </div>
+        </div>
+    </nav>
     {% endif %}
     {% block content %}
     {% endblock %}
